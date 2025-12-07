@@ -18,11 +18,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
     origin: [
         'http://localhost:5173',
-        'http://localhost:8080',
         'http://localhost:8081',
         'http://192.168.1.4:8080',
-        process.env.FRONTEND_URL, // Vercel Frontend
-        /\.vercel\.app$/ // Allow all Vercel subdomains (optional but helpful)
+        process.env.FRONTEND_URL
     ].filter(Boolean),
     credentials: true
 }));
@@ -42,14 +40,9 @@ const connectDB = async () => {
         if (!process.env.MONGODB_URI) {
             throw new Error('MONGODB_URI environment variable is not set');
         }
-        
-        await mongoose.connect(process.env.MONGODB_URI, {
-            maxPoolSize: 1, // Important for serverless
-            minPoolSize: 0,
-            socketTimeoutMS: 30000,
-            serverSelectionTimeoutMS: 5000,
-        });
-        
+
+        await mongoose.connect(process.env.MONGODB_URI);
+
         isConnected = true;
         console.log('✅ MongoDB connected successfully');
     } catch (error) {
@@ -99,12 +92,8 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, () => {
-        console.log(`🚀 Server running on port ${PORT}`);
-        console.log(`📍 API URL: http://localhost:${PORT}`);
-        console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-    });
-}
-
-export default app;
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📍 API URL: http://localhost:${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+});

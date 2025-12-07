@@ -11,8 +11,57 @@ import {
     Image as ImageIcon, Upload, Trophy
 } from "lucide-react";
 
+interface Experience {
+    id: number;
+    company: string;
+    role: string;
+    duration: string;
+    description: string;
+}
+
+interface Education {
+    id: number;
+    school: string;
+    degree: string;
+    year: string;
+}
+
+interface Project {
+    id: number;
+    name: string;
+    link: string;
+    description: string;
+}
+
+interface Achievement {
+    id: number;
+    title: string;
+    description: string;
+}
+
+interface PersonalInfo {
+    fullName: string;
+    email: string;
+    phone: string;
+    location: string;
+    linkedin: string;
+    website: string;
+    imageUrl: string;
+}
+
+export interface ResumeData {
+    title: string;
+    personal: PersonalInfo;
+    summary: string;
+    experience: Experience[];
+    education: Education[];
+    projects: Project[];
+    skills: string[];
+    achievements: Achievement[];
+}
+
 interface ResumeFormProps {
-    resumeData: any;
+    resumeData: ResumeData;
     handlers: {
         handlePersonalChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
         handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -33,7 +82,7 @@ interface ResumeFormProps {
         removeAchievement: (id: number) => void;
         updateAchievement: (id: number, field: string, value: string) => void;
         handleAIEnhance: (type: 'summary' | 'experience', text: string, id?: number) => void;
-        setResumeData: React.Dispatch<React.SetStateAction<any>>;
+        setResumeData: React.Dispatch<React.SetStateAction<ResumeData>>;
     };
     activeTab: string;
     setActiveTab: (tab: string) => void;
@@ -151,7 +200,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({
                                                         size="icon"
                                                         variant="destructive"
                                                         className="absolute -top-1 -right-1 w-5 h-5 rounded-full"
-                                                        onClick={() => setResumeData((prev: any) => ({ ...prev, personal: { ...prev.personal, imageUrl: "" } }))}
+                                                        onClick={() => setResumeData(prev => ({ ...prev, personal: { ...prev.personal, imageUrl: "" } }))}
                                                     >
                                                         <Trash2 className="w-3 h-3" />
                                                     </Button>
@@ -226,7 +275,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({
                         <TabsContent value="experience" className="flex flex-col h-full mt-0 data-[state=active]:flex">
                             <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
                                 <div className="space-y-4">
-                                    {resumeData.experience.map((exp: any) => (
+                                    {resumeData.experience.map((exp) => (
                                         <Card key={exp.id} className="p-4 relative border-l-4 border-l-green-500 shadow-sm">
                                             <Button
                                                 variant="ghost"
@@ -292,7 +341,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({
                         <TabsContent value="education" className="flex flex-col h-full mt-0 data-[state=active]:flex">
                             <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
                                 <div className="space-y-6">
-                                    {resumeData.education.map((edu: any) => (
+                                    {resumeData.education.map((edu) => (
                                         <Card key={edu.id} className="p-4 relative">
                                             <Button
                                                 variant="ghost"
@@ -337,7 +386,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({
                         <TabsContent value="projects" className="flex flex-col h-full mt-0 data-[state=active]:flex">
                             <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 ">
                                 <div className="space-y-6">
-                                    {resumeData.projects.map((proj: any) => (
+                                    {resumeData.projects.map((proj) => (
                                         <Card key={proj.id} className="p-4 relative">
                                             <Button
                                                 variant="ghost"
@@ -421,7 +470,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({
                         <TabsContent value="achievements" className="flex flex-col h-full mt-0 data-[state=active]:flex">
                             <div className="flex-1 overflow-y-auto p-4 sm:p-6">
                                 <div className="space-y-4">
-                                    {resumeData.achievements.map((achievement: any) => (
+                                    {resumeData.achievements.map((achievement) => (
                                         <Card key={achievement.id} className="p-4 relative border-green-100">
                                             <Button
                                                 variant="ghost"
