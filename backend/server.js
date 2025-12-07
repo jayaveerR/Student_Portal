@@ -30,18 +30,39 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // MongoDB Connection
+let isConnected = false;
+
 const connectDB = async () => {
+    if (isConnected) {
+        console.log('✅ Using existing MongoDB connection');
+        return;
+    }
+
     try {
-        await mongoose.connect(process.env.MONGODB_URI);
+        if (!process.env.MONGODB_URI) {
+            throw new Error('MONGODB_URI environment variable is not set');
+        }
+        
+        await mongoose.connect(process.env.MONGODB_URI, {
+            maxPoolSize: 1, // Important for serverless
+            minPoolSize: 0,
+            socketTimeoutMS: 30000,
+            serverSelectionTimeoutMS: 5000,
+        });
+        
+        isConnected = true;
         console.log('✅ MongoDB connected successfully');
     } catch (error) {
         console.error('❌ MongoDB connection error:', error.message);
-        // Do not exit process in serverless environment
-        // process.exit(1); 
+        isConnected = false;
+        throw error; // Re-throw to fail fast
     }
 };
 
-connectDB();
+// Connect to DB on startup
+connectDB().catch(err => {
+    console.error('Failed to connect to MongoDB on startup:', err);
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
