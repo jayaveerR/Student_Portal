@@ -76,7 +76,7 @@ const CollegeMaterials = () => {
         const fetchMaterials = async () => {
             try {
                 const response = await axios.get(
-                    "http://192.168.1.4:5003/api/materials"
+                    `${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/materials`
                 );
                 setMaterials(response.data);
             } catch (error) {

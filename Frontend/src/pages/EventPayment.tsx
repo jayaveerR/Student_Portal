@@ -25,6 +25,12 @@ interface Payment {
     eventId?: string;
 }
 
+interface EventItem {
+    _id: string;
+    title: string;
+    [key: string]: unknown;
+}
+
 const EventPayment = () => {
     const [payments, setPayments] = useState<Payment[]>([]);
     const [rollNo, setRollNo] = useState("");
@@ -32,15 +38,15 @@ const EventPayment = () => {
     const [amount, setAmount] = useState("");
     const [itemName, setItemName] = useState("");
     const [paymentMethod, setPaymentMethod] = useState<'cash' | 'phonepe'>('cash');
-    const [suggestions, setSuggestions] = useState<any[]>([]);
+    const [suggestions, setSuggestions] = useState<Record<string, unknown>[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [course, setCourse] = useState("All");
 
     // Event management state
-    const [events, setEvents] = useState<any[]>([]);
+    const [events, setEvents] = useState<EventItem[]>([]);
     const [activeEventId, setActiveEventId] = useState<string>("");
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [activeEvent, setActiveEvent] = useState<any>(null);
+    const [activeEvent, setActiveEvent] = useState<EventItem | null>(null);
 
     const suggestionRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +54,7 @@ const EventPayment = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await axios.get('http://192.168.1.4:5003/api/events/all');
+                const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/events/all`);
                 setEvents(res.data);
                 if (res.data.length > 0) {
                     // Set the most recent event as active by default
@@ -74,7 +80,7 @@ const EventPayment = () => {
                 queryParams.append("eventId", activeEventId);
             }
             const queryString = queryParams.toString();
-            const res = await axios.get(`http://192.168.1.4:5003/api/events/payments${queryString ? `?${queryString}` : ""}`);
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/events/payments${queryString ? `?${queryString}` : ""}`);
             setPayments(res.data);
         } catch (error) {
             console.error(error);
@@ -115,7 +121,7 @@ const EventPayment = () => {
                     queryParams.append("course", course);
                 }
                 const queryString = queryParams.toString();
-                const res = await axios.get(`http://192.168.1.4:5003/api/events/search${queryString ? `?${queryString}` : ""}`);
+                const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/events/search${queryString ? `?${queryString}` : ""}`);
                 setSuggestions(res.data);
                 setShowSuggestions(true);
             } catch (error) {
@@ -130,7 +136,7 @@ const EventPayment = () => {
         return () => clearTimeout(timeoutId);
     }, [rollNo, course, activeEventId]);
 
-    const handleSelectStudent = (student: any) => {
+    const handleSelectStudent = (student: Record<string, unknown>) => {
         // Try to identify Roll Number and Name fields dynamically
         const keys = Object.keys(student);
         const rollKey = keys.find(k => k.toLowerCase().includes('roll') || k.toLowerCase().includes('id')) || keys[0];
@@ -141,7 +147,7 @@ const EventPayment = () => {
         rawRoll = rawRoll.replace(/^\d+-/, '');
 
         setRollNo(rawRoll);
-        setStudentName(student[nameKey] || Object.values(student)[0] || "Unknown");
+        setStudentName(String(student[nameKey] || Object.values(student)[0] || "Unknown"));
         setShowSuggestions(false);
     };
 
@@ -166,7 +172,7 @@ const EventPayment = () => {
         };
 
         try {
-            await axios.post('http://192.168.1.4:5003/api/events/payment', newPayment);
+            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/events/payment`, newPayment);
             toast.success("Payment Added");
             fetchPayments();
 
@@ -183,7 +189,7 @@ const EventPayment = () => {
 
     const handleDelete = async (id: string) => {
         try {
-            await axios.delete(`http://192.168.1.4:5003/api/events/payment/${id}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/events/payment/${id}`);
             toast.success("Payment Deleted");
             setPayments(prev => prev.filter(p => p._id !== id));
         } catch (error) {
@@ -194,7 +200,7 @@ const EventPayment = () => {
 
     const handleClearAll = async () => {
         try {
-            await axios.delete(`http://192.168.1.4:5003/api/events/payments/all`);
+            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/events/payments/all`);
             setPayments([]);
             toast.success("All payment history cleared successfully");
         } catch (error) {

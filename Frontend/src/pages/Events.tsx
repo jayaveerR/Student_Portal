@@ -49,7 +49,7 @@ const Events = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await axios.get('http://192.168.1.4:5003/api/events/all');
+                const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/events/all`);
                 setEvents(res.data);
             } catch (error) {
                 console.error("Failed to fetch events", error);

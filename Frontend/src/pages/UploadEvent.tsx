@@ -54,7 +54,7 @@ const UploadEvent = () => {
         if (pdfFile) formData.append('pdf', pdfFile);
 
         try {
-            await axios.post('http://192.168.1.4:5003/api/events/upload', formData, {
+            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/events/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

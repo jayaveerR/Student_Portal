@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import authService from '@/services/authService';
 import { Loader2, Calendar, ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const DEPARTMENTS = ["MCA", "MBA", "ECE", "CSE", "EEE", "AIML", "AI", "DA", "Mechanicals"];
 
@@ -46,7 +46,7 @@ const Timetable = () => {
 
             setLoading(true);
             try {
-                const response = await fetch(`http://192.168.1.4:5003/api/timetable/${user?.id}?department=${encodeURIComponent(selectedDept)}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/timetable/${user?.id}?department=${encodeURIComponent(selectedDept)}`);
                 const data = await response.json();
                 if (data.success && data.timetable) {
                     const scheduleData = data.timetable.schedule;

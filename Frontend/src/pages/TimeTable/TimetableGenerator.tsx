@@ -78,8 +78,7 @@ const TimetableGenerator = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://192.168.1.4:5003/api/timetable/${
-            user?.id
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/timetable/${user?.id
           }?department=${encodeURIComponent(selectedDept)}`
         );
         const data = await response.json();
@@ -149,7 +148,7 @@ const TimetableGenerator = () => {
     }
     setSaving(true);
     try {
-      const response = await fetch("http://192.168.1.4:5003/api/timetable", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/timetable`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -335,9 +334,9 @@ print:block
           <div className="w-full print:w-full mx-auto">
             {/* Class In-charge Row */}
             <div className="flex flex-wrap border-b border-black h-auto print:h-[34px]">
-              
+
               {/* LABEL (perfect mobile-safe) */}
-  <div className="
+              <div className="
       bg-slate-50 
       border-r border-black 
       font-bold 
@@ -347,15 +346,15 @@ print:block
       flex-shrink-0 
       text-[10px] md:text-sm print:text-xs
   ">
-    Class In-charge
-  </div>
-             {/* INPUT WRAPPER (mobile fit) */}
-  <div className="flex-1 min-w-0 p-0">
-    <input
-      aria-label="Class In-charge Name"
-      value={classInCharge}
-      onChange={(e) => setClassInCharge(e.target.value)}
-      className="
+                Class In-charge
+              </div>
+              {/* INPUT WRAPPER (mobile fit) */}
+              <div className="flex-1 min-w-0 p-0">
+                <input
+                  aria-label="Class In-charge Name"
+                  value={classInCharge}
+                  onChange={(e) => setClassInCharge(e.target.value)}
+                  className="
           w-full 
           h-full 
           p-0.5 md:p-1 
@@ -363,39 +362,39 @@ print:block
           font-bold 
           text-[10px] md:text-sm print:text-xs
       "
-      placeholder="Enter Name"
-    />
-  </div>
+                  placeholder="Enter Name"
+                />
+              </div>
 
-</div>
+            </div>
 
 
 
             {/* MAIN TABLE */}
-    <table className="w-full border-collapse text-left">
-         <thead>
-        <tr className="bg-slate-50">
-          <th className="border border-black p-1 w-[5%] text-center text-[10px]">S.No</th>
-          <th className="border border-black p-1 w-[20%] text-[10px]">Course Code</th>
-          <th className="border border-black p-1 w-[45%] text-[10px]">Course Title</th>
-          <th className="border border-black p-1 w-[30%] text-[10px]">Name of the Faculty</th>
-          <th className="border border-black p-1 w-[3%] print:hidden"></th>
-        </tr>
-      </thead>
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr className="bg-slate-50">
+                  <th className="border border-black p-1 w-[5%] text-center text-[10px]">S.No</th>
+                  <th className="border border-black p-1 w-[20%] text-[10px]">Course Code</th>
+                  <th className="border border-black p-1 w-[45%] text-[10px]">Course Title</th>
+                  <th className="border border-black p-1 w-[30%] text-[10px]">Name of the Faculty</th>
+                  <th className="border border-black p-1 w-[3%] print:hidden"></th>
+                </tr>
+              </thead>
 
 
               <tbody>
-        {courses.map((course, idx) => (
-          <tr key={idx}>
-            <td className="border border-black p-1 text-center w-[5%]">{idx + 1}</td>
-            <td className="border border-black p-1 w-[20%]"></td>
-            <td className="border border-black p-1 w-[45%]"></td>
-            <td className="border border-black p-1 w-[30%]"></td>
-            <td className="border border-black p-1 text-center print:hidden">×</td>
-          </tr>
-        ))}
-      </tbody>
-     </table>
+                {courses.map((course, idx) => (
+                  <tr key={idx}>
+                    <td className="border border-black p-1 text-center w-[5%]">{idx + 1}</td>
+                    <td className="border border-black p-1 w-[20%]"></td>
+                    <td className="border border-black p-1 w-[45%]"></td>
+                    <td className="border border-black p-1 w-[30%]"></td>
+                    <td className="border border-black p-1 text-center print:hidden">×</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
             <div className="p-1 md:p-2 print:hidden">
               <Button

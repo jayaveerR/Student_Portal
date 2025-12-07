@@ -55,7 +55,7 @@ const UploadMaterial = () => {
             data.append('subject', formData.subject);
             data.append('unit', formData.unit);
 
-            await axios.post('http://192.168.1.4:5003/api/materials/upload', data, {
+            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5003/api'}/materials/upload`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
