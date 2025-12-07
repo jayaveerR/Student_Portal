@@ -11,56 +11,7 @@ A comprehensive web application designed to streamline academic activities for s
 - **📝 Question Paper Generator**: Tools for creating both Internal and External assessment papers with customizable templates.
 - **🔐 Secure Authentication**: Robust user authentication system for students and faculty.
 
-## 🛠️ Technology Stack
+## Structure
 
-### Frontend
-
-- **Framework**: React (Vite)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS, Shadcn UI
-- **State Management & Routing**: React Router, React Hooks
-
-### Backend
-
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB
-- **Authentication**: JWT (JSON Web Tokens)
-- **File Handling**: Multer (for uploads)
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- MongoDB (Local or AtlasURI)
-
-### Installation
-
-1. **Clone the repository**
-
-    ```bash
-    git clone https://github.com/jayaveerR/jayaveerR-Student_Portal.git
-    cd jayaveerR-Student_Portal
-    ```
-
-2. **Frontend Setup**
-
-    ```bash
-    cd Frontend
-    npm install
-    npm run dev
-    ```
-
-3. **Backend Setup**
-
-    ```bash
-    cd backend
-    npm install
-    # Create a .env file with your MongoDB URI and JWT Secret
-    npm start
-    ```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+- **Frontend**: Contains the frontend application code.
+# jayaveerR-Student_Portal
